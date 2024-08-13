@@ -1,0 +1,20 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <h1>Your Registered Events</h1>
+    <ul>
+    {% for registration in registrations %}
+        <li>
+            <h2>{{ registration.event.title }}</h2>
+            <p>Date: {{ registration.event.date }} at {{ registration.event.time }}</p>
+            <p>Location: {{ registration.event.location }}</p>
+            <form action="{% url 'unregister_from_event' registration.event.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Unregister</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>You haven't registered for any events yet.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

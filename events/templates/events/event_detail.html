@@ -1,0 +1,25 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <h1>{{ event.title }}</h1>
+    <p>Date: {{ event.date }}</p>
+    <p>Time: {{ event.time }}</p>
+    <p>Location: {{ event.location }}</p>
+    <p>Available Slots: {{ event.available_slots }}</p>
+    <p>{{ event.description }}</p>
+    {% if user.is_authenticated %}
+        {% if user in event.registration_set.all %}
+            <form action="{% url 'unregister_from_event' event.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Unregister</button>
+            </form>
+        {% else %}
+            <form action="{% url 'register_for_event' event.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Register</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p>Please <a href="{% url 'login' %}">login</a> to register for this event.</p>
+    {% endif %}
+{% endblock %}

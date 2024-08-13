@@ -1,0 +1,20 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+    <h1>Upcoming Events</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Search events...">
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+    {% for event in events %}
+        <li>
+            <h2><a href="{% url 'event_detail' event.id %}">{{ event.title }}</a></h2>
+            <p>{{ event.date }} at {{ event.time }}</p>
+            <p>{{ event.description|truncatewords:30 }}</p>
+        </li>
+    {% empty %}
+        <li>No upcoming events.</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
