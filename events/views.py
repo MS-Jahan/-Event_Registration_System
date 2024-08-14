@@ -22,6 +22,10 @@ def event_detail(request, event_id):
 def register_for_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if event.available_slots > 0:
+        # check if user already registered for this event
+        if Registration.objects.filter(user=request.user, event=event).exists():
+            messages.error(request, 'You are already registered for this event.')
+            return redirect('event_detail', event_id=event.id)
         Registration.objects.get_or_create(user=request.user, event=event)
         event.available_slots -= 1
         event.save()
