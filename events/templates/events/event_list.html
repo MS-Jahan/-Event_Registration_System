@@ -24,6 +24,11 @@
                     </h2>
                     <p class="text-gray-600 mb-2">{{ event.date }} at {{ event.time }}</p>
                     <p class="text-gray-700">{{ event.description|truncatewords:30 }}</p>
+                    {% if user.is_authenticated %}
+                        {% if event.id in registered_event_ids %}
+                            <p style=" width: fit-content;" class="bg-green-100 mt-3 text-green-700 px-1 py-1 rounded-md">Registered</p>
+                        {% endif %}
+                    {% endif %}
                 </li>
             {% endfor %}
             </ul>

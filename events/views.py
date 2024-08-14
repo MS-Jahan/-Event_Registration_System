@@ -12,7 +12,18 @@ def event_list(request):
     query = request.GET.get('q')
     if query:
         events = events.filter(Q(title__icontains=query) | Q(description__icontains=query))
-    return render(request, 'events/event_list.html', {'events': events})
+    
+    # check if user is authenticated
+    if request.user.is_authenticated:
+        registrations = Registration.objects.filter(user=request.user)
+    else:
+        registrations = Registration.objects.filter(user=None)
+    registered_event_ids = registrations.values_list('event_id', flat=True)
+    
+    return render(request, 'events/event_list.html', {
+        'events': events,
+        'registered_event_ids': registered_event_ids
+    })
 
 def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
