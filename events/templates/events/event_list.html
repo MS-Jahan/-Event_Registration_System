@@ -1,20 +1,34 @@
 {% extends 'events/base.html' %}
 
 {% block content %}
-    <h1>Upcoming Events</h1>
-    <form method="get">
-        <input type="text" name="q" placeholder="Search events...">
-        <button type="submit">Search</button>
-    </form>
-    <ul>
-    {% for event in events %}
-        <li>
-            <h2><a href="{% url 'event_detail' event.id %}">{{ event.title }}</a></h2>
-            <p>{{ event.date }} at {{ event.time }}</p>
-            <p>{{ event.description|truncatewords:30 }}</p>
-        </li>
-    {% empty %}
-        <li>No upcoming events.</li>
-    {% endfor %}
-    </ul>
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Upcoming Events</h1>
+        
+        <form method="get" class="mb-8">
+            <div class="flex">
+                <input type="text" name="q" placeholder="Search events..." 
+                       class="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button type="submit" 
+                        class="bg-indigo-600 text-white px-6 py-2 rounded-r-md hover:bg-indigo-700 transition duration-300">
+                    Search
+                </button>
+            </div>
+        </form>
+
+        {% if events %}
+            <ul class="space-y-8">
+            {% for event in events %}
+                <li class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                    <h2 class="text-2xl font-semibold text-indigo-600 mb-2">
+                        <a href="{% url 'event_detail' event.id %}" class="hover:underline">{{ event.title }}</a>
+                    </h2>
+                    <p class="text-gray-600 mb-2">{{ event.date }} at {{ event.time }}</p>
+                    <p class="text-gray-700">{{ event.description|truncatewords:30 }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-gray-600 text-center py-8">No upcoming events.</p>
+        {% endif %}
+    </div>
 {% endblock %}
