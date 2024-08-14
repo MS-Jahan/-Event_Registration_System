@@ -12,7 +12,7 @@ This is a Django-based web application for managing event registrations. Users c
 
 ## Project Structure
 ```
-F:.
+/ (root)
 |   .gitignore
 |   db.sqlite3
 |   manage.py
