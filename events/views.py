@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Event, Registration
 from django.utils import timezone
+from .forms import CustomUserCreationForm
+from django.contrib.auth import login
 
 def event_list(request):
     events = Event.objects.filter(date__gte=timezone.now()).order_by('date', 'time')
@@ -45,3 +47,14 @@ def unregister_from_event(request, event_id):
 def user_dashboard(request):
     registrations = Registration.objects.filter(user=request.user).select_related('event')
     return render(request, 'events/user_dashboard.html', {'registrations': registrations})
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('event_list')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
